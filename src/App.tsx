@@ -9,12 +9,18 @@ import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
   {
     path: "/",
     // 부모 컴포넌트 지정
-    element: <Layout/>,
+    element: (
+      // ProtectedRoute -> 인증을 요구하는 React Hook
+      <ProtectedRoute>
+        <Layout/>
+      </ProtectedRoute>
+    ),
     // 라우트(자식) 컴포넌트 지정
     children: [
       {
@@ -27,10 +33,12 @@ const router = createBrowserRouter([
       }
     ]
   },
+  // 로그인 페이지
   {
     path: "/login",
     element: <Login/>
   },
+  // 회원가입 페이지
   {
     path: "/create-account",
     element: <CreateAccount/>

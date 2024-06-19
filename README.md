@@ -21,3 +21,34 @@
 - Github Pages  
 - Vite + TypeScript + SWC  
 ---
+## 프로젝트 구조
+- 2024년 6월 19일 기준  
+```
++ twitter-reloaded
+|   .env
+|   .eslintrc.cjs
+|   .gitignore
+|   env.d.ts
+|   index.html
+|   package-lock.json
+|   package.json
+|   README.md
+|   tree_output.txt
+|   tsconfig.json
+|   tsconfig.node.json
+|   vite.config.ts
++---src
+    |   App.tsx
+    |   firebase.ts
+    |   main.tsx
+    |   
+    +---components
+    |       layout.tsx
+    |       loading-screen.tsx
+    |       
+    +---routes
+            create-account.tsx
+            home.tsx
+            login.tsx
+            profile.tsx
+```

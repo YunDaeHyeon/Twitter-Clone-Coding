@@ -1,5 +1,8 @@
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
     height: 100;
@@ -43,6 +46,7 @@ const Error = styled.span`
 `;
 
 export default function CreateAccount(){
+    const navigate = useNavigate();
     const [isLoading, setLoading] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -64,12 +68,27 @@ export default function CreateAccount(){
         }
     }
 
-    const onSubmit = (e : React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async(e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // submit 방지
+        // name, email, password 중 하나라도 공백이라면 함수 종료
+        if(name === "" || email === "" || password === "") return;
         try{
-            // 계정 생성
-            // 사용자 프로필 이름 추가
+            setLoading(true);
+            /*
+            <계정 생성> 
+            props 중 auth는 firebase.ts에서 export 시킨 auth를 뜻한다.
+            성공적으로 수행되었을 시 UserCredntial이라는 Promise 객체를 반환한다.
+            */
+            const credentials = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(credentials.user);
+
+            // 회원가입된 계정의 프로필 이름을 설정한다.
+            await updateProfile(credentials.user, {
+                displayName: name,
+            })
+
             // 회원가입 성공 시 메인 페이지로 리다이렉션
+            navigate("/");
         }catch(e){
             console.error(e);
         }finally{
@@ -80,7 +99,7 @@ export default function CreateAccount(){
 
     return (
         <Wrapper>
-            <Title>🍳 로그인</Title>
+            <Title>🍳 회원가입</Title>
             <Form onSubmit={onSubmit}>
                 <Input 
                     onChange={onChange}

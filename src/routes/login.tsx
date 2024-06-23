@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { Input, Switcher, Title, Wrapper, Error, Form } from '../components/auth-components';
+import { Input, Switcher, Title, Wrapper, Error, Form } from '../components/style/loginAndAccount-styled';
 
 export default function Login(){
     const navigate = useNavigate();

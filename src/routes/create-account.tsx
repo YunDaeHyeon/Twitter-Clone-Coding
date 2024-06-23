@@ -1,51 +1,9 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
-
-const Wrapper = styled.div`
-    height: 100;
-    width: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 0px;
-`;
-
-const Title = styled.h1`
-    font-size: 42px;
-`;
- 
-const Form = styled.form`
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-`;
-
-const Input = styled.input`
-    width: 100%;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: none;
-    font-size: 16px;
-    &[type="submit"]{
-        // 만약, input의 type이 submit이라면 cursor를 pointer로 변경
-        cursor: pointer;
-        &:hover{ // 만약 마우스가 hover 상태라면
-            opacity: 0.8;;
-        }
-    }
-`;
-
-const Error = styled.span`
-  font-weight: 600;
-  color: tomato;
-`;
+import { Input, Switcher, Title, Wrapper, Error, Form } from '../components/auth-components';
 
 // FirebaseError에 존재하는 Code에 대응하는 에러메시지 생성
 // const errors = {
@@ -64,7 +22,7 @@ export default function CreateAccount(){
 
     // 객체 e의 타입과 <input> 요소의 변경 이벤트에 대한 타입 정의
     const onChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value } = e.target; // 구조분해 할당으로 event 객체 호출
+        const { name, value } = e.target; // 구조분해 할당으로 event 객체 호출
         if(name == "name"){
             setName(value);
         }else if(name == "email"){
@@ -78,8 +36,8 @@ export default function CreateAccount(){
     const onSubmit = async(e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // submit 방지
         setError("");
-        // name, email, password 중 하나라도 공백이라면 함수 종료
-        if(name === "" || email === "" || password === "") return;
+        // name, email, password 중 하나라도 공백 혹은 로딩중이라면 함수 종료
+        if(isLoading || name === "" || email === "" || password === "") return;
         try{
             setLoading(true);
             /*
@@ -139,6 +97,9 @@ export default function CreateAccount(){
                 />
             </Form>
                 {error !== "" ? <Error>{error}</Error> : null }
+            <Switcher>
+                이미 계정이 있나요? <Link to="/login">Login →</Link>
+            </Switcher>
         </Wrapper>
     )
 }

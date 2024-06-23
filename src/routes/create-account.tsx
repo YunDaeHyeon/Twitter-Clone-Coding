@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { FirebaseError } from 'firebase/app';
 
 const Wrapper = styled.div`
     height: 100;
@@ -20,6 +21,7 @@ const Title = styled.h1`
 const Form = styled.form`
     width: 100%;
     margin-top: 50px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -44,6 +46,11 @@ const Error = styled.span`
   font-weight: 600;
   color: tomato;
 `;
+
+// FirebaseError에 존재하는 Code에 대응하는 에러메시지 생성
+// const errors = {
+//     "auth/email-already-in-use":"이미 존재하는 이메일입니다.",
+// };
 
 export default function CreateAccount(){
     const navigate = useNavigate();
@@ -70,6 +77,7 @@ export default function CreateAccount(){
 
     const onSubmit = async(e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // submit 방지
+        setError("");
         // name, email, password 중 하나라도 공백이라면 함수 종료
         if(name === "" || email === "" || password === "") return;
         try{
@@ -80,7 +88,6 @@ export default function CreateAccount(){
             성공적으로 수행되었을 시 UserCredntial이라는 Promise 객체를 반환한다.
             */
             const credentials = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(credentials.user);
 
             // 회원가입된 계정의 프로필 이름을 설정한다.
             await updateProfile(credentials.user, {
@@ -88,13 +95,15 @@ export default function CreateAccount(){
             })
 
             // 회원가입 성공 시 메인 페이지로 리다이렉션
+            console.log("로그인성공 : ",credentials.user);
             navigate("/");
         }catch(e){
-            console.error(e);
+            if(e instanceof FirebaseError){
+                setError(e.message);
+            }
         }finally{
             setLoading(false);
         }
-        console.log(name, email, password);
     }
 
     return (

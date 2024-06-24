@@ -68,7 +68,7 @@ export default function Login(){
                 />
                 <Input
                     type="submit"
-                    value={isLoading ? "Loading..." : "Create Account"}
+                    value={isLoading ? "Loading..." : "Login"}
                 />
             </Form>
                 {error !== "" ? <Error>{error}</Error> : null }

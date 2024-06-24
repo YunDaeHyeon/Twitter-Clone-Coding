@@ -31,6 +31,9 @@ export const Input = styled.input`
     font-size: 16px;
     &[type="submit"]{
         // 만약, input의 type이 submit이라면 cursor를 pointer로 변경
+        background-color: #1d9bf0;
+        color: white;
+        font-weight: bold;
         cursor: pointer;
         &:hover{ // 만약 마우스가 hover 상태라면
             opacity: 0.8;;

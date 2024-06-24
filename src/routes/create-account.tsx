@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { Link, useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
 import { Input, Switcher, Title, Wrapper, Error, Form } from '../components/style/loginAndAccount-styled';
+import GithubConnection from '../components/github-connection';
 
 // FirebaseError에 존재하는 Code에 대응하는 에러메시지 생성
 // const errors = {
@@ -100,6 +101,7 @@ export default function CreateAccount(){
             <Switcher>
                 이미 계정이 있나요? <Link to="/login">Login →</Link>
             </Switcher>
+            <GithubConnection/>
         </Wrapper>
     )
 }

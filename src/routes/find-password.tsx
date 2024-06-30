@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Switcher, Title, Wrapper, Error, Form } from '../components/style/loginAndAccount-styled';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
-import { FirebaseError } from 'firebase/app';
+import { Link } from 'react-router-dom'
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -19,7 +18,6 @@ const Message = styled.p`
 `;
 
 export default function FindPassword(){
-    const navigate = useNavigate();
     const [isLoading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
 

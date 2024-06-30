@@ -24,6 +24,8 @@ export default function Login(){
         else if(name === "password"){
             setPassword(value);
         }
+
+
     }
 
     const onSubmit = async(e : React.FormEvent<HTMLFormElement>) => {
@@ -74,6 +76,9 @@ export default function Login(){
                 {error !== "" ? <Error>{error}</Error> : null }
             <Switcher>
                 계정이 없나요? <Link to="/create-account">Create Account →</Link>
+            </Switcher>
+            <Switcher>
+                암호를 잊었나요? <Link to="/find-password">Find Password →</Link>
             </Switcher>
             <GithubConnection/>
         </Wrapper>

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/protected-route";
+import FindPassword from "./routes/find-password";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,12 @@ const router = createBrowserRouter([
   {
     path: "/create-account",
     element: <CreateAccount/>
-  }
+  },
+  // 비밀번호 찾기 페이지
+  {
+    path: "/find-password",
+    element: <FindPassword/>
+  },
 ])
 
 // 전역 styled-components 정의

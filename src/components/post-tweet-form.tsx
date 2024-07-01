@@ -71,6 +71,7 @@ export default function PostTweetForm(){
     // 파일 입력
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
+        console.log(e.target.files);
         // 여러개의 파일이 업로드 되는것을 방지한다.
         // e.target.files에 파일이 존재하며 그 파일이 1개라면 수행
         if(files && files.length === 1){

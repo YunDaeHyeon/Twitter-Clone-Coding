@@ -1,5 +1,6 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { auth } from '../firebase';
 
 // Outlet으로 렌더링되는 자식 컴포넌트의 범위 파악 용도
 const Container = styled.div`
@@ -48,6 +49,14 @@ const MenuItem = styled.div`
 
 
 export default function Layout() {
+    const navigate = useNavigate();
+    const onLogout = async() => {
+        const ok = confirm("로그아웃하시겠습니까?");
+        if(ok){ // 사용자가 "예"를 클릭했을때
+            await auth.signOut(); // 로그아웃이 완료될때까지 기다리기
+            navigate("/login");
+        }
+    }
     return(
         <Wrapper>
             <Menu>
@@ -65,7 +74,7 @@ export default function Layout() {
 </svg>
                 </MenuItem>
                 </Link>
-                <MenuItem className="log-out">
+                <MenuItem onClick={onLogout} className="log-out">
                 <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <path clipRule="evenodd" fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" />
   <path clipRule="evenodd" fillRule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" />

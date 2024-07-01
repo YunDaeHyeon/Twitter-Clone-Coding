@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // 환경변수 호출 및 세팅
 const firebaseConfig = {
@@ -17,3 +19,9 @@ const app = initializeApp(firebaseConfig);
 
 // firebase Authentication 사용
 export const auth = getAuth(app);
+
+// firebase storage 사용
+export const storage = getStorage(app);
+
+// firebase database 사용
+export const database = getFirestore(app);

@@ -1,7 +1,8 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
-import { auth, database } from "../firebase";
+import { auth, database, storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
     display: flex;
@@ -71,11 +72,16 @@ export default function PostTweetForm(){
     // 파일 입력
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
-        console.log(e.target.files);
         // 여러개의 파일이 업로드 되는것을 방지한다.
         // e.target.files에 파일이 존재하며 그 파일이 1개라면 수행
         if(files && files.length === 1){
-            setFile(files[0]);
+            // 업로드한 파일의 크기가 1MB 미만이라면
+            if(files[0].size < (1 * 1024 * 1024)){
+                setFile(files[0]);
+                console.log(files[0].size);
+            }else{ // 파일의 크기가 1MB보다 크다면
+                alert("파일의 크기가 1MB보다 적어야 합니다.");
+            }
         }
     }
 
@@ -86,13 +92,33 @@ export default function PostTweetForm(){
         if(!user || isLoading || tweet === "" || tweet.length > 180) return;
         try{
             setLoading(true);
-            await addDoc(collection(database, "tweets"), {
+            const doc = await addDoc(collection(database, "tweets"), {
                 tweet,
                 createdAt: Date.now(),
                 // 닉네임이 존재하지 않는다면 (일부 SNS로 연동한 경우)
                 username: user.displayName || "Anonymous",
                 userId: user.uid,
             });
+            // 파일 업로드가 되어있는 상태라면 -> storage에 저장
+            if(file){
+                // 해당 파일을 "tweets/{유저ID}-{유저닉네임}/{트윗ID}" 경로에 저장한다. (없으면 생성)
+                const locationRef = ref(
+                    storage, 
+                    `tweets/${user.uid}-${user.displayName}/${doc.id}`
+                );
+                // locationRef에서 지정한 경로에 file을 업로드
+                const result = await uploadBytes(locationRef, file);
+                // 업로드한 이미지의 url 가져오기
+                const url = await getDownloadURL(result.ref)
+                // 업로드한 이미지(storage)를 트윗(firestore)에 추가
+                await updateDoc(doc, {
+                    // firestore document에 photo 필드 추가
+                    photo: url,
+                });
+                // 업로드 성공 시 트윗 및 파일 입력창 초기화
+                 setTweet("");
+                 setFile(null);
+            }
         }catch(e){
             console.log(e);
         }finally{

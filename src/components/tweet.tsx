@@ -28,6 +28,7 @@ const Username = styled.span`
 const Payload = styled.p`
   margin: 10px 0px;
   font-size: 18px;
+  margin-bottom: 30px;
 `;
 
 const DeleteButton = styled.button`
@@ -35,6 +36,19 @@ const DeleteButton = styled.button`
   color: white;
   font-weight: 600;
   border: 0;
+  font-size: 12px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const EditButton = styled.button`
+  background-color: cadetblue;
+  color: white;
+  font-weight: 600;
+  border: 0;
+  margin-left: 5px;
   font-size: 12px;
   padding: 5px 10px;
   text-transform: uppercase;
@@ -72,7 +86,10 @@ export default function Tweet({ userId, id, username, photo, tweet }: ITweet) {
           // user?.uid = user객체가 존재하면 user.uid 반환, 존재하지 않으면 undefined 반환
           // 해당 트윗에 작성자라면 delete 버튼 활성화
           user?.uid === userId ? (
-            <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+            <Column>
+              <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+              <EditButton>Edit</EditButton>
+            </Column>
           ) : null
         }
       </Column>

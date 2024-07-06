@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
+import UserIcon from "../components/style/icon/user-icon";
 
 const Wrapper = styled.div`
   display: flex;
@@ -61,7 +62,7 @@ const TWEET_LIMIT = 25;
   주의
   프로필 컴포넌트에 존재하는 트윗 호출의 경우 timeline 컴포넌트와 같은
   로직이 아님. (QuerySnaoshot 사용 X)
-  따라서 real time이 아니므로 트윗 삭제 혹은 변경 시 새로고침이 되야함.
+  따라서 real time이 아니므로 트윗 삭제 혹은 변경 시 새로고침이 필요함.
 */
 export default function Profile() {
   const user = auth.currentUser;
@@ -122,18 +123,7 @@ export default function Profile() {
   return (
     <Wrapper>
       <AvatarUpload htmlFor="avatar">
-        {avatar ? (
-          <AvatarImg src={avatar} />
-        ) : (
-          <svg
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
-          </svg>
-        )}
+        {avatar ? <AvatarImg src={avatar} /> : <UserIcon />}
       </AvatarUpload>
       <AvatarInput
         onChange={onAvatarChange}

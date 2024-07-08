@@ -45,9 +45,65 @@ const AvatarInput = styled.input`
   display: none;
 `;
 
+// 닉네임 변경 시작
 const Name = styled.span`
   font-size: 22px;
 `;
+
+const EditContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const EditInput = styled.input`
+  font-size: 16px;
+  border-radius: 20px;
+  border: 1px solid white;
+  margin-right: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: gray;
+  padding-left: 5px;
+  background-color: black;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &::placeholder {
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+  }
+  &:focus {
+    outline: none;
+    border-color: #1d9bf0;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const SaveButton = styled.button`
+  border-radius: 20px;
+  background-color: #1d9bf0;
+  color: white;
+`;
+
+const CancelButton = styled.button`
+  margin-left: 10px;
+  border-radius: 20px;
+  background-color: black;
+  border: 1px solid tomato;
+  color: tomato;
+`;
+
+// 닉네임 변경 끝
 
 const Tweets = styled.div`
   display: flex;
@@ -68,6 +124,11 @@ export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [tweets, setTweets] = useState<ITweet[]>([]);
+  const [displayName, setDisplayName] = useState(user?.displayName || "");
+  // 닉네임 수정중인지 여부
+  const [isEditing, setIsEditing] = useState(false);
+
+  // 아바타 이미지 변경
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!user) return; // 사용자가 존재하지 않는다면 취소
@@ -89,6 +150,24 @@ export default function Profile() {
     }
   };
 
+  // 닉네임 변경 모드
+  const onChangeName = () => {
+    setIsEditing(true);
+  };
+
+  // 닉네임 변경 input change handler
+  const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplayName(e.target.value);
+  };
+
+  // 닉네임 변경 - 완료
+  const handleSaveClick = () => {};
+
+  // 닉네임 변경 - 취소
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };
+  // 컴포넌트 최초 마운트 데이터 불러오기
   const fetchTweets = async () => {
     const tweetQuery = query(
       // "tweets" collection에 있는 모든 트윗 중
@@ -131,7 +210,24 @@ export default function Profile() {
         type="file"
         accept="image/*"
       />
-      <Name>{user?.displayName ? user.displayName : "Anonymous"}</Name>
+      {!isEditing ? (
+        <Name onClick={onChangeName}>
+          {user?.displayName ? user.displayName : "Anonymous"}
+        </Name>
+      ) : (
+        <EditContainer>
+          <EditInput
+            type="text"
+            value={displayName}
+            onChange={onDisplayNameChange}
+            autoFocus
+          />
+          <ButtonContainer>
+            <SaveButton onClick={handleSaveClick}>Save</SaveButton>
+            <CancelButton onClick={handleCancelClick}>Cancel</CancelButton>
+          </ButtonContainer>
+        </EditContainer>
+      )}
       <Tweets>
         {tweets.map((tweet) => (
           <Tweet key={tweet.id} {...tweet} />

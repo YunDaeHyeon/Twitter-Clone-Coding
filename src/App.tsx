@@ -11,6 +11,7 @@ import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/protected-route";
 import FindPassword from "./routes/find-password";
+import TweetEdit from "./routes/TweetEdit";
 
 const router = createBrowserRouter([
   {
@@ -19,37 +20,41 @@ const router = createBrowserRouter([
     element: (
       // ProtectedRoute -> 인증을 요구하는 React Hook
       <ProtectedRoute>
-        <Layout/>
+        <Layout />
       </ProtectedRoute>
     ),
     // 라우트(자식) 컴포넌트 지정
     children: [
       {
         path: "",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "profile",
-        element: <Profile/>,
-      }
-    ]
+        element: <Profile />,
+      },
+      {
+        path: ":tweetId",
+        element: <TweetEdit />,
+      },
+    ],
   },
   // 로그인 페이지
   {
     path: "/login",
-    element: <Login/>
+    element: <Login />,
   },
   // 회원가입 페이지
   {
     path: "/create-account",
-    element: <CreateAccount/>
+    element: <CreateAccount />,
   },
   // 비밀번호 찾기 페이지
   {
     path: "/find-password",
-    element: <FindPassword/>
+    element: <FindPassword />,
   },
-])
+]);
 
 // 전역 styled-components 정의
 const GlobalStyles = createGlobalStyle`
@@ -73,11 +78,11 @@ const Wrapper = styled.div`
 
 function App() {
   const [isLoading, setLoading] = useState(true);
-  const init = async() => {
+  const init = async () => {
     // firebase의 사용자 인증이 될 때까지의 로딩화면
     await auth.authStateReady(); // 최초 호출 시 Promise 반환
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     init();
@@ -85,12 +90,14 @@ function App() {
 
   return (
     <Wrapper>
-      <GlobalStyles/>
-      {isLoading ? // Loading 로직 구현
-        <LoadingScreen/> : 
-        <RouterProvider router={router}/>}
+      <GlobalStyles />
+      {isLoading ? ( // Loading 로직 구현
+        <LoadingScreen />
+      ) : (
+        <RouterProvider router={router} />
+      )}
     </Wrapper>
-  )
+  );
 }
 
-export default App
+export default App;

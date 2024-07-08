@@ -23,10 +23,18 @@ export interface ITweet {
 }
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   gap: 10px;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none; // Edge, IE의 경우
+  scrollbar-width: none; // FireFox의 경우
 `;
 
 const TWEET_LIMIT = 25;

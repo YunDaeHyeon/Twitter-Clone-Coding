@@ -6,18 +6,26 @@ import ProfileIcon from "./style/icon/profile-icon";
 import LogoutIcon from "./style/icon/logout-icon";
 
 // Outlet으로 렌더링되는 자식 컴포넌트의 범위 파악 용도
-const Container = styled.div`
-  border: 1px solid red;
-`;
+const Container = styled.div``;
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100px;
+  height: 100vh;
   max-width: 860px;
   display: grid;
   grid-template-columns: 1fr 4fr;
   padding: 50px 0px;
   gap: 20px;
+  /* 스크롤바 숨기기 */
+  overflow-y: scroll; /* 수직 스크롤바만 필요 시 표시 */
+  &::-webkit-scrollbar {
+    display: none; /* WebKit 브라우저 (Chrome, Safari)에서 스크롤바 숨기기 */
+    width: 0;
+    height: 0;
+  }
+
+  -ms-overflow-style: none; /* IE, Edge에서 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 `;
 
 const Menu = styled.div`

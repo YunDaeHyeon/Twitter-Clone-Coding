@@ -3,6 +3,7 @@ import { ITweet } from "./timeline";
 import { auth, database, storage } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: grid;
@@ -57,6 +58,7 @@ const EditButton = styled.button`
 `;
 
 export default function Tweet({ userId, id, username, photo, tweet }: ITweet) {
+  const navigate = useNavigate();
   const user = auth.currentUser;
 
   // 트윗 삭제
@@ -77,6 +79,14 @@ export default function Tweet({ userId, id, username, photo, tweet }: ITweet) {
       console.error(e);
     }
   };
+
+  // 트윗 수정
+  const onEdit = () => {
+    const ok = confirm("수정하시겠습니까?");
+    if (!ok || user?.uid !== userId) return;
+    navigate(`/${id}`);
+  };
+
   return (
     <Wrapper>
       <Column>
@@ -88,7 +98,7 @@ export default function Tweet({ userId, id, username, photo, tweet }: ITweet) {
           user?.uid === userId ? (
             <Column>
               <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-              <EditButton>Edit</EditButton>
+              <EditButton onClick={onEdit}>Edit</EditButton>
             </Column>
           ) : null
         }

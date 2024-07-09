@@ -176,7 +176,7 @@ export default function Profile() {
       alert("변경에 실패하였습니다.");
       console.log("닉네임 변경 에러 : ", e);
     } finally {
-      alert("변경되었습니다!");
+      alert("변경되었습니다.");
       setIsEditing(false);
     }
   };

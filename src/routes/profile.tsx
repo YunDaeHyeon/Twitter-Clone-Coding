@@ -161,12 +161,31 @@ export default function Profile() {
   };
 
   // 닉네임 변경 - 완료
-  const handleSaveClick = () => {};
+  const handleSaveClick = async () => {
+    const ok = confirm("변경하시겠습니까?");
+    if (!ok || !user) return;
+    if (displayName.length > 8) {
+      alert("닉네임은 8자 이내여야 합니다.");
+      return;
+    }
+    try {
+      await updateProfile(user, {
+        displayName, // 닉네임 변경
+      });
+    } catch (e) {
+      alert("변경에 실패하였습니다.");
+      console.log("닉네임 변경 에러 : ", e);
+    } finally {
+      alert("변경되었습니다!");
+      setIsEditing(false);
+    }
+  };
 
   // 닉네임 변경 - 취소
   const handleCancelClick = () => {
     setIsEditing(false);
   };
+
   // 컴포넌트 최초 마운트 데이터 불러오기
   const fetchTweets = async () => {
     const tweetQuery = query(

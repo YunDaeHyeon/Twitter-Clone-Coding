@@ -91,9 +91,10 @@ export default function PostTweetForm() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const ok = confirm("게시하겠습니까?");
     const user = auth.currentUser;
     // 로그인 X, 로딩중이거나, 트윗이 비어있거나, 180자가 넘으면 X
-    if (!user || isLoading || tweet === "" || tweet.length > 180) return;
+    if (!ok || !user || isLoading || tweet === "" || tweet.length > 180) return;
     try {
       setLoading(true);
       const doc = await addDoc(collection(database, "tweets"), {
@@ -123,6 +124,7 @@ export default function PostTweetForm() {
     } catch (e) {
       console.log(e);
     } finally {
+      alert("성공적으로 게시되었습니다!");
       setLoading(false);
     }
   };
